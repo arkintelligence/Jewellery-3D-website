@@ -1,0 +1,4 @@
+import { Points,PointMaterial } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useMemo,useRef } from 'react';
+export function FloatingParticles({count=260,color='#f5b841',radius=5,position=[0,1,0]}){const ref=useRef();const points=useMemo(()=>{const a=new Float32Array(count*3);for(let i=0;i<count;i++){const r=radius*Math.cbrt(Math.random()),t=Math.random()*Math.PI*2,y=(Math.random()-.5)*radius*1.2;a[i*3]=Math.cos(t)*r;a[i*3+1]=y;a[i*3+2]=Math.sin(t)*r}return a},[count,radius]);useFrame((state)=>{if(ref.current){ref.current.rotation.y=state.clock.elapsedTime*.025;ref.current.position.y=position[1]+Math.sin(state.clock.elapsedTime*.3)*.08}});return <Points ref={ref} positions={points} position={position} stride={3} frustumCulled><PointMaterial transparent color={color} size={.025} sizeAttenuation depthWrite={false} opacity={.72}/></Points>}
